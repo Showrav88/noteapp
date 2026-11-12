@@ -1,0 +1,5 @@
+{
+  "name": "noteapp",
+  "install": "set -e; git config user.name 'Showravkarmakar'; git config user.email 'Showrav88@users.noreply.github.com'; git config commit.gpgsign false; for d in api web; do if [ -f \"$d/package-lock.json\" ]; then npm --prefix \"$d\" ci; elif [ -f \"$d/package.json\" ]; then npm --prefix \"$d\" install; fi; done",
+  "start": "set -e; git config user.name 'Showravkarmakar'; git config user.email 'Showrav88@users.noreply.github.com'; git config commit.gpgsign false"
+}
