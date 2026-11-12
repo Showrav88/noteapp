@@ -241,6 +241,15 @@ export const openapi = {
       },
     },
     '/posts': {
+      get: {
+        summary: 'Post feed (all posts, login required)',
+        tags: ['Posts'],
+        security: [{ bearerAuth: [] }],
+        parameters: pageParams,
+        description:
+          'Any logged-in user can browse every post. Newest first. Author name and email are included.',
+        responses: { 200: { description: 'Paginated posts' }, 401: { description: 'Unauthorized' } },
+      },
       post: {
         summary: 'Create post',
         tags: ['Posts'],
