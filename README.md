@@ -54,6 +54,29 @@ Schemas live in `api/src/models/`. Declared indexes only via `schema.index(...)`
 | 7 | Scenario 1 (`GET /users/by-interest`) | One `aggregate()`; correct `hasNextPage` |
 | 8 | `scripts/explain.js` | No COLLSCAN on list/read queries |
 | 9 | OpenAPI for every endpoint | Try from `/docs` |
-| 10 | Next.js frontend (`web/`) | Pages hit the API |
+| 10 | Next.js frontend (`web/`) | Done — see below |
 | 11 | Deploy API + web on Render | Public URLs work |
+
+## Web (step 10)
+
+Design follows [Care Guide Web Development](https://careguidebd.com/service/web-development/) colors: navy `#211E3B`, cyan `#43BAFF`, accent orange `#FF3C00`, muted `#F8F8F8`.
+
+| Page | API |
+|------|-----|
+| `/login`, `/register` | `POST /auth/*` |
+| `/notes` | Notes CRUD + pagination |
+| `/posts` | `GET/POST /posts` → link to `/posts/user/:id` |
+| `/posts/user/:id` | Scenario 2 — `GET /users/:id/posts` |
+| `/interests` | Scenario 1 — `GET /users/by-interest` |
+| `/admin` | Users + `GET /notes/all` (admin only) |
+
+```bash
+cd web
+cp .env.example .env.local
+# NEXT_PUBLIC_API_URL=http://localhost:3000
+npm install
+npm run dev
+```
+
+Open `http://localhost:3001`. Set API `CORS_ORIGIN=http://localhost:3001`.
 | 12 | README with index explanations | Reviewer can run and understand indexes |
