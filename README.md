@@ -46,7 +46,8 @@ Schemas live in `api/src/models/`. Declared indexes only via `schema.index(...)`
 | ---- | ---- | --------------------- |
 | 1 | API skeleton, `/health`, Swagger | Done |
 | 2 | User, Note, Post models + indexes | Atlas index counts above |
-| 3 | Register, login, JWT middleware, seed admin | 401/403 cases |
+| 3 | Register, login, JWT middleware, seed admin | `npm run seed` |
+| 3–9 | Full REST API + aggregations + OpenAPI | Done in `api/` |
 | 4 | Notes CRUD + pagination | User B cannot read user A’s note (404) |
 | 5 | Admin users + `GET /notes/all` | Paginated; admin cannot delete self |
 | 6 | Posts create + Scenario 2 aggregation | One `aggregate()` call |
