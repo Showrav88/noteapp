@@ -6,6 +6,7 @@ import { Post } from '../models/Post.js';
 import { HttpError } from '../utils/HttpError.js';
 import { parsePagination, slicePage } from '../utils/paginate.js';
 import { toObjectId } from '../utils/objectId.js';
+import { normalizeInterests } from '../utils/interests.js';
 
 function publicUser(user) {
   return {
@@ -50,7 +51,7 @@ export async function createUser(body, actor) {
       email: email.trim().toLowerCase(),
       passwordHash,
       role: 'user',
-      interests: Array.isArray(interests) ? interests : [],
+      interests: normalizeInterests(interests),
     });
     return publicUser(user);
   } catch (err) {

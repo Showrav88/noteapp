@@ -5,6 +5,71 @@ const pageParams = [
 
 const message = { type: 'object', properties: { message: { type: 'string' } } };
 
+const jsonBody = (schema, example) => ({
+  required: true,
+  content: {
+    'application/json': {
+      schema,
+      example,
+    },
+  },
+});
+
+const registerBody = {
+  type: 'object',
+  required: ['name', 'email', 'password'],
+  properties: {
+    name: { type: 'string' },
+    email: { type: 'string', format: 'email' },
+    password: { type: 'string', format: 'password' },
+    interests: {
+      type: 'array',
+      items: { type: 'string' },
+      description: 'Optional. Used by Scenario 1 (users grouped by interest).',
+    },
+  },
+};
+
+const noteBody = {
+  type: 'object',
+  required: ['title'],
+  properties: {
+    title: { type: 'string' },
+    body: { type: 'string' },
+  },
+};
+
+const postBody = {
+  type: 'object',
+  required: ['title'],
+  properties: {
+    title: { type: 'string' },
+    body: { type: 'string' },
+  },
+};
+
+const adminUserBody = {
+  type: 'object',
+  required: ['name', 'email', 'password'],
+  properties: {
+    name: { type: 'string' },
+    email: { type: 'string' },
+    password: { type: 'string' },
+    interests: { type: 'array', items: { type: 'string' } },
+  },
+};
+
+const patchUserBody = {
+  type: 'object',
+  properties: {
+    name: { type: 'string' },
+    email: { type: 'string' },
+    password: { type: 'string' },
+    role: { type: 'string', enum: ['user', 'admin'] },
+    interests: { type: 'array', items: { type: 'string' } },
+  },
+};
+
 export const openapi = {
   openapi: '3.0.3',
   info: {
@@ -25,22 +90,12 @@ export const openapi = {
       post: {
         summary: 'Register',
         tags: ['Auth'],
-        requestBody: {
-          required: true,
-          content: {
-            'application/json': {
-              schema: {
-                type: 'object',
-                required: ['name', 'email', 'password'],
-                properties: {
-                  name: { type: 'string' },
-                  email: { type: 'string' },
-                  password: { type: 'string' },
-                },
-              },
-            },
-          },
-        },
+        requestBody: jsonBody(registerBody, {
+          name: 'Alice',
+          email: 'alice@example.com',
+          password: 'securepass123',
+          interests: ['chess', 'reading'],
+        }),
         responses: { 201: { description: 'Created' }, 409: { description: 'Conflict' } },
       },
     },
@@ -48,21 +103,17 @@ export const openapi = {
       post: {
         summary: 'Login',
         tags: ['Auth'],
-        requestBody: {
-          required: true,
-          content: {
-            'application/json': {
-              schema: {
-                type: 'object',
-                required: ['email', 'password'],
-                properties: {
-                  email: { type: 'string' },
-                  password: { type: 'string' },
-                },
-              },
+        requestBody: jsonBody(
+          {
+            type: 'object',
+            required: ['email', 'password'],
+            properties: {
+              email: { type: 'string' },
+              password: { type: 'string' },
             },
           },
-        },
+          { email: 'alice@example.com', password: 'securepass123' },
+        ),
         responses: { 200: { description: 'Token' }, 401: { description: 'Unauthorized' } },
       },
     },
@@ -95,6 +146,12 @@ export const openapi = {
         summary: 'Create user (admin)',
         tags: ['Users'],
         security: [{ bearerAuth: [] }],
+        requestBody: jsonBody(adminUserBody, {
+          name: 'Bob',
+          email: 'bob@example.com',
+          password: 'securepass123',
+          interests: ['music'],
+        }),
         responses: { 201: { description: 'Created' } },
       },
     },
@@ -111,6 +168,7 @@ export const openapi = {
         tags: ['Users'],
         security: [{ bearerAuth: [] }],
         parameters: [{ name: 'id', in: 'path', required: true, schema: { type: 'string' } }],
+        requestBody: jsonBody(patchUserBody, { interests: ['chess', 'reading'] }),
         responses: { 200: { description: 'Updated' } },
       },
       delete: {
@@ -142,7 +200,11 @@ export const openapi = {
         summary: 'Create note',
         tags: ['Notes'],
         security: [{ bearerAuth: [] }],
-        responses: { 201: { description: 'Created' } },
+        requestBody: jsonBody(noteBody, {
+          title: 'My first note',
+          body: 'Optional note text here.',
+        }),
+        responses: { 201: { description: 'Created' }, 400: { description: 'Bad request' } },
       },
     },
     '/notes/all': {
@@ -167,6 +229,7 @@ export const openapi = {
         tags: ['Notes'],
         security: [{ bearerAuth: [] }],
         parameters: [{ name: 'id', in: 'path', required: true, schema: { type: 'string' } }],
+        requestBody: jsonBody(noteBody, { title: 'Updated title', body: 'Updated body' }),
         responses: { 200: { description: 'Updated' } },
       },
       delete: {
@@ -182,6 +245,10 @@ export const openapi = {
         summary: 'Create post',
         tags: ['Posts'],
         security: [{ bearerAuth: [] }],
+        requestBody: jsonBody(postBody, {
+          title: 'My first post',
+          body: 'Optional post content.',
+        }),
         responses: { 201: { description: 'Created' } },
       },
     },

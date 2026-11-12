@@ -2,6 +2,7 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { User } from '../models/User.js';
 import { HttpError } from '../utils/HttpError.js';
+import { normalizeInterests } from '../utils/interests.js';
 
 const INVALID_LOGIN = 'Invalid email or password';
 
@@ -22,7 +23,7 @@ function publicUser(user) {
   };
 }
 
-export async function register({ name, email, password }) {
+export async function register({ name, email, password, interests }) {
   if (!name?.trim() || !email?.trim() || !password) {
     throw new HttpError(400, 'name, email, and password are required');
   }
@@ -34,6 +35,7 @@ export async function register({ name, email, password }) {
       email: email.trim().toLowerCase(),
       passwordHash,
       role: 'user',
+      interests: normalizeInterests(interests),
     });
     return { token: signToken(user._id), user: publicUser(user) };
   } catch (err) {
