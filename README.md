@@ -1,11 +1,26 @@
 # noteapp
 
-Notes API interview project. Repository: [Showrav88/noteapp](https://github.com/Showrav88/noteapp).
+Notes API interview project.
 
-Monorepo layout:
+## Live deployment (submission)
 
-- `api/` — Express 5 + MongoDB (Mongoose)
-- `web/` — Next.js frontend
+| Item | URL |
+| ---- | --- |
+| **Frontend (Next.js)** | https://noteapp-frontend-vd3y.onrender.com |
+| **Backend API** | https://noteapp-a4z2.onrender.com |
+| **API docs (Swagger)** | https://noteapp-a4z2.onrender.com/docs |
+| **Health check** | https://noteapp-a4z2.onrender.com/health |
+| **Git repository (monorepo)** | https://github.com/Showrav88/noteapp |
+
+**Repository layout (one GitHub repo, two deploy roots):**
+
+| Part | Folder | Render service |
+| ---- | ------ | -------------- |
+| Backend | [`api/`](https://github.com/Showrav88/noteapp/tree/main/api) | `noteapp-a4z2` |
+| Frontend | [`web/`](https://github.com/Showrav88/noteapp/tree/main/web) | `noteapp-frontend-vd3y` |
+
+- Backend: Express 5 + MongoDB (Mongoose) in `api/`
+- Frontend: Next.js App Router in `web/`
 
 ## API (step 1 — skeleton)
 
@@ -61,26 +76,29 @@ Schemas live in `api/src/models/`. Declared indexes only via `schema.index(...)`
 
 ## Deployment (step 11)
 
-**API (Render):** https://noteapp-a4z2.onrender.com
+Both services run on **Render** (free tier): API + separate Web service (`Root Directory` = `web`).
 
-- Health: `GET /health`
-- Docs: `/docs`
+| Service | Live URL |
+| ------- | -------- |
+| Frontend | https://noteapp-frontend-vd3y.onrender.com |
+| API | https://noteapp-a4z2.onrender.com |
+| Swagger | https://noteapp-a4z2.onrender.com/docs |
 
 **API environment variables (Render):**
 
-| Variable | Purpose |
-| -------- | ------- |
+| Variable | Example / note |
+| -------- | -------------- |
 | `MONGODB_URI` | Atlas connection string |
-| `JWT_SECRET` | Sign login tokens |
-| `CORS_ORIGIN` | Full URL of the web app (no trailing slash), e.g. `https://your-web.onrender.com` |
+| `JWT_SECRET` | Long random secret |
+| `CORS_ORIGIN` | `https://noteapp-frontend-vd3y.onrender.com` |
 
-**Web (Render):** Create a second service with root directory `web`, build `npm ci && npm run build`, start `npm start`.
+**Web environment variables (Render):**
 
-| Variable | Purpose |
-| -------- | ------- |
-| `NEXT_PUBLIC_API_URL` | API base URL, e.g. `https://noteapp-a4z2.onrender.com` |
+| Variable | Example / note |
+| -------- | -------------- |
+| `NEXT_PUBLIC_API_URL` | `https://noteapp-a4z2.onrender.com` |
 
-Set API `CORS_ORIGIN` to match the web service URL after both are live.
+Build: `npm ci && npm run build` · Start: `npm start` · Root directory: `web`
 
 ## Web (step 10)
 
