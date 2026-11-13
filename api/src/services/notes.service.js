@@ -41,7 +41,11 @@ export async function listMyNotes(ownerId, query) {
 
 export async function listAllNotes(query) {
   const { page, limit, skip } = parsePagination(query);
-  const notes = await Note.find({})
+  const filter = {};
+  if (query.owner) {
+    filter.owner = toObjectId(query.owner, 'Invalid owner id');
+  }
+  const notes = await Note.find(filter)
     .sort({ _id: -1 })
     .skip(skip)
     .limit(limit + 1)

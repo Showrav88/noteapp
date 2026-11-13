@@ -229,7 +229,15 @@ export const openapi = {
         summary: 'All notes (admin)',
         tags: ['Notes'],
         security: [{ bearerAuth: [] }],
-        parameters: pageParams,
+        parameters: [
+          ...pageParams,
+          {
+            name: 'owner',
+            in: 'query',
+            schema: { type: 'string' },
+            description: 'Optional user id — list only that owner’s notes',
+          },
+        ],
         responses: { 200: { description: 'Paginated' }, 403: { description: 'Forbidden' } },
       },
     },
