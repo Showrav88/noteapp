@@ -47,11 +47,11 @@ export default function InterestsPage() {
       />
       {error ? <p className="text-sm text-brand-orange">{error}</p> : null}
       {loading ? (
-        <p className="text-sm text-brand-ink/60">Loading…</p>
+        <p className="text-sm text-brand-ink">Loading…</p>
       ) : (
         <div className="space-y-3">
           {data.items.length === 0 ? (
-            <p className="text-sm text-brand-ink/60">No interest groups yet.</p>
+            <p className="text-sm text-brand-ink">No interest groups yet.</p>
           ) : null}
           {data.items.map((group) => {
             const label = formatInterestLabel(group.interest);
@@ -77,7 +77,7 @@ export default function InterestsPage() {
                   />
                   <span className="min-w-0 flex-1">
                     <span className="block text-base font-bold text-brand-navy">{label}</span>
-                    <span className="text-xs font-medium uppercase tracking-wide text-brand-ink/45">Interest group</span>
+                    <span className="text-xs font-medium uppercase tracking-wide text-brand-ink">Interest group</span>
                   </span>
                   <span className="shrink-0 rounded-full bg-brand-cyan/15 px-3 py-1 text-sm font-semibold text-brand-navy">
                     {group.count} {group.count === 1 ? 'member' : 'members'}
@@ -85,7 +85,7 @@ export default function InterestsPage() {
                 </button>
                 {isOpen ? (
                   <div id={panelId} className="border-t border-brand-border bg-brand-muted/40 px-4 py-2">
-                    <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-brand-ink/50">Members</p>
+                    <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-brand-ink">Members</p>
                     <ul className="divide-y divide-brand-border rounded-md border border-brand-border bg-white">
                       {group.users.map((u) => (
                         <li key={u._id} className="px-3 py-2.5 text-sm font-medium text-brand-ink">

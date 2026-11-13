@@ -50,7 +50,7 @@ export function AppShell({ children }) {
 
   if (!ready) {
     return (
-      <div className="flex min-h-screen items-center justify-center text-sm text-brand-ink/60">
+      <div className="flex min-h-screen items-center justify-center text-sm text-brand-ink">
         Loading…
       </div>
     );
@@ -85,7 +85,7 @@ export function AppShell({ children }) {
                   key={item.href}
                   href={item.href}
                   className={`flex items-center gap-1.5 rounded-md px-3 py-2 text-sm font-medium ${
-                    active ? 'bg-brand-cyan/15 text-brand-navy' : 'text-brand-ink/80 hover:bg-brand-muted'
+                    active ? 'bg-brand-cyan/15 text-brand-navy' : 'text-brand-ink hover:bg-brand-muted'
                   }`}
                 >
                   <Icon size={16} />
@@ -95,7 +95,7 @@ export function AppShell({ children }) {
             })}
           </nav>
           <div className="flex items-center gap-2 text-sm">
-            <span className="hidden text-brand-ink/70 sm:inline">{user?.name}</span>
+            <span className="hidden text-brand-ink sm:inline">{user?.name}</span>
             <Button variant="ghost" className="!px-2" onClick={logout} title="Log out">
               <LogOut size={16} />
             </Button>

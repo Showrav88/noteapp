@@ -38,7 +38,7 @@ export default function LoginPage() {
       <div className="w-full max-w-md rounded-lg border border-brand-border bg-white p-8 shadow-card">
         <p className="text-xs font-semibold uppercase tracking-wider text-brand-cyan">Noteapp</p>
         <h1 className="mt-2 text-2xl font-bold text-brand-navy">Sign in</h1>
-        <p className="mt-1 text-sm text-brand-ink/70">Use the account you registered or the admin from seed.</p>
+        <p className="mt-1 text-sm text-brand-ink">Use the account you registered or the admin from seed.</p>
         <form onSubmit={onSubmit} className="mt-6 space-y-4">
           <Input label="Email" type="email" autoComplete="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
           <Input label="Password" type="password" autoComplete="current-password" value={password} onChange={(e) => setPassword(e.target.value)} required />
@@ -47,7 +47,7 @@ export default function LoginPage() {
             {loading ? 'Signing in…' : 'Sign in'}
           </Button>
         </form>
-        <p className="mt-6 text-center text-sm text-brand-ink/70">
+        <p className="mt-6 text-center text-sm text-brand-ink">
           No account?{' '}
           <Link href="/register" className="font-semibold text-brand-cyan hover:underline">
             Register

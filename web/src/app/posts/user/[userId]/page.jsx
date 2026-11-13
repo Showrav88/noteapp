@@ -2,6 +2,7 @@
 
 import { useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import { AuthorStrip, PostCard } from '../../../../components/PostCard';
 import { PageHeader } from '../../../../components/PageHeader';
 import { Pagination } from '../../../../components/Pagination';
 import { api } from '../../../../lib/api';
@@ -25,28 +26,41 @@ export default function UserPostsPage() {
       .finally(() => setLoading(false));
   }, [userId, page]);
 
+  const postCountOnPage = data?.posts?.length ?? 0;
+
   return (
     <div>
       <PageHeader
         title={data ? `${data.name}'s posts` : 'User posts'}
-        description="All posts published by this author."
+        description="All posts from this author, newest first."
       />
       {error ? <p className="text-sm text-brand-orange">{error}</p> : null}
       {loading ? (
-        <p className="text-sm text-brand-ink/60">Loading…</p>
+        <p className="text-sm text-brand-ink">Loading…</p>
       ) : (
-        <section className="space-y-3">
-          {data?.posts?.length ? (
-            data.posts.map((post) => (
-              <article key={post._id} className="rounded-lg border border-brand-border bg-white p-4 shadow-card">
-                <h2 className="font-semibold text-brand-navy">{post.title}</h2>
-                {post.body ? <p className="mt-2 text-sm text-brand-ink/80 whitespace-pre-wrap">{post.body}</p> : null}
-              </article>
-            ))
-          ) : (
-            <p className="text-sm text-brand-ink/60">No posts for this user.</p>
-          )}
-          <Pagination page={page} hasNextPage={data?.hasNextPage} onPageChange={setPage} />
+        <section>
+          {data?.name ? (
+            <AuthorStrip
+              name={data.name}
+              subtitle={
+                postCountOnPage
+                  ? `Showing ${postCountOnPage} post${postCountOnPage === 1 ? '' : 's'} on this page`
+                  : 'No posts yet'
+              }
+            />
+          ) : null}
+          <div className="space-y-4">
+            {postCountOnPage ? (
+              data.posts.map((post) => (
+                <PostCard key={post._id} title={post.title} body={post.body} />
+              ))
+            ) : (
+              <p className="text-sm text-brand-ink">No posts for this user.</p>
+            )}
+          </div>
+          <div className="mt-4">
+            <Pagination page={page} hasNextPage={data?.hasNextPage} onPageChange={setPage} />
+          </div>
         </section>
       )}
     </div>

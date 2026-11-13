@@ -119,14 +119,14 @@ export default function AdminPage() {
                 <div key={u._id} className="flex items-center justify-between rounded-lg border border-brand-border bg-white p-4 shadow-card">
                   <div>
                     <p className="font-semibold text-brand-navy">{u.name}</p>
-                    <p className="text-sm text-brand-ink/60">{u.email}</p>
-                    <p className="text-xs text-brand-ink/50">
+                    <p className="text-sm text-brand-ink">{u.email}</p>
+                    <p className="text-xs text-brand-ink">
                       Role: {u.role}
                       {isSelf ? ' · you' : ''}
                     </p>
                   </div>
                   {isSelf ? (
-                    <span className="text-xs text-brand-ink/50">Cannot delete yourself</span>
+                    <span className="text-xs text-brand-ink">Cannot delete yourself</span>
                   ) : (
                     <Button variant="ghost" className="text-brand-orange" onClick={() => removeUser(u)}>
                       <Trash2 size={16} />
@@ -176,10 +176,10 @@ export default function AdminPage() {
           {notes.items.map((note) => (
             <article key={note._id} className="rounded-lg border border-brand-border bg-white p-4 shadow-card">
               <h2 className="font-semibold text-brand-navy">{note.title}</h2>
-              <p className="mt-1 text-xs text-brand-ink/60">
+              <p className="mt-1 text-xs text-brand-ink">
                 Owner: {note.owner?.name} ({note.owner?.email})
               </p>
-              {note.body ? <p className="mt-2 text-sm text-brand-ink/80">{note.body}</p> : null}
+              {note.body ? <p className="mt-2 text-sm text-brand-ink">{note.body}</p> : null}
             </article>
           ))}
           <Pagination page={notePage} hasNextPage={notes.hasNextPage} onPageChange={setNotePage} />

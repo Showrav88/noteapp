@@ -3,7 +3,7 @@ export function PageHeader({ title, description, action }) {
     <div className="mb-6 flex flex-col gap-2 border-b border-brand-border pb-4 sm:flex-row sm:items-end sm:justify-between">
       <div>
         <h1 className="text-2xl font-bold tracking-tight text-brand-navy">{title}</h1>
-        {description ? <p className="mt-1 max-w-xl text-sm text-brand-ink/70">{description}</p> : null}
+        {description ? <p className="mt-1 max-w-xl text-sm text-brand-ink">{description}</p> : null}
       </div>
       {action ? <div className="shrink-0">{action}</div> : null}
     </div>

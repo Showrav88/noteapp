@@ -1,12 +1,11 @@
 'use client';
 
-import Link from 'next/link';
 import { useEffect, useState } from 'react';
-import { UserRound } from 'lucide-react';
 import { Button } from '../../components/Button';
 import { Input, TextArea } from '../../components/Input';
 import { PageHeader } from '../../components/PageHeader';
 import { Pagination } from '../../components/Pagination';
+import { PostCard } from '../../components/PostCard';
 import { api } from '../../lib/api';
 
 export default function PostsFeedPage() {
@@ -52,7 +51,7 @@ export default function PostsFeedPage() {
     <div>
       <PageHeader
         title="Post feed"
-        description="Recent posts from everyone. Open an author’s name to view their posts."
+        description="Recent posts from everyone. Use Their posts on the right to see only that author’s posts."
       />
       <form
         onSubmit={createPost}
@@ -70,37 +69,15 @@ export default function PostsFeedPage() {
       {error ? <p className="mb-4 text-sm text-brand-orange">{error}</p> : null}
       <section className="space-y-4">
         {loading ? (
-          <p className="text-sm text-brand-ink/60">Loading…</p>
+          <p className="text-sm text-brand-ink">Loading…</p>
         ) : (
           data.items.map((post) => (
-            <article
+            <PostCard
               key={post._id}
-              className="overflow-hidden rounded-xl border-2 border-brand-border bg-white shadow-sm ring-1 ring-brand-border/30"
-            >
-              <header className="flex items-start gap-3 border-b border-brand-border bg-brand-muted/50 px-4 py-3 sm:px-5">
-                <span
-                  className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-brand-navy text-brand-cyan"
-                  aria-hidden
-                >
-                  <UserRound size={20} strokeWidth={2} />
-                </span>
-                <div className="min-w-0 flex-1">
-                  <Link
-                    href={`/posts/user/${post.author._id}`}
-                    className="block truncate text-sm font-bold text-brand-navy hover:text-brand-cyan"
-                  >
-                    {post.author.name}
-                  </Link>
-                  <p className="truncate text-xs text-brand-ink/55">{post.author.email}</p>
-                </div>
-              </header>
-              <div className="px-4 py-4 sm:px-5">
-                <h2 className="text-lg font-bold text-brand-navy">{post.title}</h2>
-                {post.body ? (
-                  <p className="mt-2 text-sm leading-relaxed text-brand-ink/85 whitespace-pre-wrap">{post.body}</p>
-                ) : null}
-              </div>
-            </article>
+              title={post.title}
+              body={post.body}
+              author={post.author}
+            />
           ))
         )}
         <Pagination page={page} hasNextPage={data.hasNextPage} onPageChange={setPage} />

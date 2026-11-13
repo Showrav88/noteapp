@@ -3,7 +3,7 @@ import { Button } from './Button';
 export function Pagination({ page, hasNextPage, onPageChange }) {
   return (
     <div className="flex items-center justify-between gap-3 border-t border-brand-border pt-4">
-      <span className="text-sm text-brand-ink/70">Page {page}</span>
+      <span className="text-sm text-brand-ink">Page {page}</span>
       <div className="flex gap-2">
         <Button variant="secondary" disabled={page <= 1} onClick={() => onPageChange(page - 1)}>
           Previous

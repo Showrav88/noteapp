@@ -78,9 +78,9 @@ export default function NotesPage() {
       <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_320px]">
         <section className="space-y-3">
           {loading ? (
-            <p className="text-sm text-brand-ink/60">Loading notes…</p>
+            <p className="text-sm text-brand-ink">Loading notes…</p>
           ) : data.items.length === 0 ? (
-            <p className="rounded-md border border-dashed border-brand-border bg-white p-8 text-center text-sm text-brand-ink/60">
+            <p className="rounded-md border border-dashed border-brand-border bg-white p-8 text-center text-sm text-brand-ink">
               No notes yet. Add one on the right.
             </p>
           ) : (
@@ -95,7 +95,7 @@ export default function NotesPage() {
                 ) : (
                   <>
                     <h2 className="font-semibold text-brand-navy">{note.title}</h2>
-                    {note.body ? <p className="mt-2 text-sm text-brand-ink/80 whitespace-pre-wrap">{note.body}</p> : null}
+                    {note.body ? <p className="mt-2 text-sm text-brand-ink whitespace-pre-wrap">{note.body}</p> : null}
                     <div className="mt-3 flex gap-2">
                       <Button variant="ghost" className="!px-2" onClick={() => setEditingId(note._id)}>
                         <Pencil size={16} /> Edit

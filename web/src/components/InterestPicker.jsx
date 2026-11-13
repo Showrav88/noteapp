@@ -28,7 +28,7 @@ export function InterestPicker({ value, onChange, label = 'Interests', required 
       <p className="mb-2 block text-sm font-medium text-brand-navy">
         {label}
         {required && value.length === 0 ? (
-          <span className="ml-1 font-normal text-brand-ink/50">— pick at least one</span>
+          <span className="ml-1 font-normal text-brand-ink">— pick at least one</span>
         ) : null}
       </p>
       {loadError ? <p className="mb-2 text-xs text-brand-orange">{loadError}</p> : null}
@@ -43,7 +43,7 @@ export function InterestPicker({ value, onChange, label = 'Interests', required 
               className={`rounded-full border px-3 py-1.5 text-sm font-medium transition focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-cyan ${
                 active
                   ? 'border-brand-cyan bg-brand-cyan/15 text-brand-navy'
-                  : 'border-brand-border bg-white text-brand-ink/80 hover:border-brand-cyan/50'
+                  : 'border-brand-border bg-white text-brand-ink hover:border-brand-cyan/50'
               }`}
             >
               {opt.label}
