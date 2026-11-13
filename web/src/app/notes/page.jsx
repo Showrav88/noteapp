@@ -74,7 +74,7 @@ export default function NotesPage() {
 
   return (
     <div>
-      <PageHeader title="My notes" description="Only your notes appear here. Pagination uses the owner + _id index." />
+      <PageHeader title="My notes" description="Your private notes — only you can view and edit them." />
       <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_320px]">
         <section className="space-y-3">
           {loading ? (
