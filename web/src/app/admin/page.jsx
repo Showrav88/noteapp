@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { Suspense, useEffect, useState } from 'react';
-import { Trash2 } from 'lucide-react';
+import { Pencil, Trash2 } from 'lucide-react';
 import { Button } from '../../components/Button';
 import { Input } from '../../components/Input';
 import { InterestPicker } from '../../components/InterestPicker';
@@ -25,6 +25,14 @@ function AdminPageContent() {
   const [form, setForm] = useState({ name: '', email: '', password: '', interests: [] });
   const [error, setError] = useState('');
   const [me, setMe] = useState(null);
+  const [editingUserId, setEditingUserId] = useState(null);
+  const [editForm, setEditForm] = useState({
+    name: '',
+    email: '',
+    password: '',
+    interests: [],
+    role: 'user',
+  });
 
   useEffect(() => {
     const urlTab = searchParams.get('tab');
@@ -93,6 +101,43 @@ function AdminPageContent() {
     }
   }
 
+  function startEditUser(user) {
+    setEditingUserId(user._id);
+    setEditForm({
+      name: user.name,
+      email: user.email,
+      password: '',
+      interests: user.interests ?? [],
+      role: user.role,
+    });
+    setError('');
+  }
+
+  async function saveEditUser(userId) {
+    if (editForm.interests.length === 0) {
+      setError('Choose at least one interest.');
+      return;
+    }
+    setError('');
+    try {
+      const body = {
+        name: editForm.name,
+        email: editForm.email,
+        interests: editForm.interests,
+        role: editForm.role,
+      };
+      if (editForm.password.trim()) {
+        body.password = editForm.password;
+      }
+      await api(`/users/${userId}`, { method: 'PATCH', body: JSON.stringify(body) });
+      setEditingUserId(null);
+      const res = await api(`/users?page=${userPage}&limit=10`);
+      setUsers(res);
+    } catch (err) {
+      setError(err.message);
+    }
+  }
+
   async function removeUser(user) {
     if (me && String(user._id) === String(me._id)) return;
     if (
@@ -113,7 +158,7 @@ function AdminPageContent() {
 
   const filterOwner = notes.items[0]?.owner;
   const tabs = [
-    { id: 'users', label: 'User management', hint: 'Create accounts, list users, and delete users.' },
+    { id: 'users', label: 'User management', hint: 'Create, update, list, and delete users.' },
     { id: 'notes', label: 'Note management', hint: 'Read all private notes. Use Their notes to show one owner’s notes.' },
   ];
 
@@ -149,25 +194,88 @@ function AdminPageContent() {
           <section className="space-y-3">
             {users.items.map((u) => {
               const isSelf = me && String(u._id) === String(me._id);
+              const isEditing = editingUserId === u._id;
               return (
-                <div key={u._id} className="flex items-center justify-between gap-2 rounded-lg border border-brand-border bg-white p-4 shadow-card">
-                  <div className="min-w-0">
-                    <p className="font-semibold text-brand-navy">{u.name}</p>
-                    <p className="text-sm text-brand-ink">{u.email}</p>
-                    <p className="text-xs text-brand-ink">
-                      Role: {u.role}
-                      {isSelf ? ' · you' : ''}
-                    </p>
-                  </div>
-                  <div className="flex shrink-0 items-center gap-2">
-                    {isSelf ? (
-                      <span className="text-xs text-brand-ink">Cannot delete yourself</span>
-                    ) : (
-                      <Button variant="ghost" className="text-brand-orange" onClick={() => removeUser(u)}>
-                        <Trash2 size={16} />
-                      </Button>
-                    )}
-                  </div>
+                <div key={u._id} className="rounded-lg border border-brand-border bg-white p-4 shadow-card">
+                  {isEditing ? (
+                    <div className="space-y-3">
+                      <h3 className="text-sm font-bold text-brand-navy">Update user</h3>
+                      <Input
+                        label="Name"
+                        value={editForm.name}
+                        onChange={(e) => setEditForm({ ...editForm, name: e.target.value })}
+                        required
+                      />
+                      <Input
+                        label="Email"
+                        type="email"
+                        value={editForm.email}
+                        onChange={(e) => setEditForm({ ...editForm, email: e.target.value })}
+                        required
+                      />
+                      <Input
+                        label="New password (optional)"
+                        type="password"
+                        autoComplete="new-password"
+                        value={editForm.password}
+                        onChange={(e) => setEditForm({ ...editForm, password: e.target.value })}
+                      />
+                      <label className="block text-sm">
+                        <span className="mb-1 block font-medium text-brand-navy">Role</span>
+                        <select
+                          className="w-full rounded-md border border-brand-border bg-white px-3 py-2 text-brand-ink"
+                          value={editForm.role}
+                          disabled={isSelf}
+                          onChange={(e) => setEditForm({ ...editForm, role: e.target.value })}
+                        >
+                          <option value="user">user</option>
+                          <option value="admin">admin</option>
+                        </select>
+                      </label>
+                      <InterestPicker
+                        value={editForm.interests}
+                        onChange={(interests) => setEditForm({ ...editForm, interests })}
+                        label="Interests (required)"
+                        required
+                      />
+                      <div className="flex flex-wrap gap-2">
+                        <Button
+                          type="button"
+                          onClick={() => saveEditUser(u._id)}
+                          disabled={editForm.interests.length === 0}
+                        >
+                          Save
+                        </Button>
+                        <Button type="button" variant="secondary" onClick={() => setEditingUserId(null)}>
+                          Cancel
+                        </Button>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="flex items-center justify-between gap-2">
+                      <div className="min-w-0">
+                        <p className="font-semibold text-brand-navy">{u.name}</p>
+                        <p className="text-sm text-brand-ink">{u.email}</p>
+                        <p className="text-xs text-brand-ink">
+                          Role: {u.role}
+                          {u.interests?.length ? ` · Interests: ${u.interests.join(', ')}` : ''}
+                          {isSelf ? ' · you' : ''}
+                        </p>
+                      </div>
+                      <div className="flex shrink-0 items-center gap-1">
+                        <Button variant="ghost" className="!px-2" onClick={() => startEditUser(u)} title="Update user">
+                          <Pencil size={16} />
+                        </Button>
+                        {isSelf ? (
+                          <span className="text-xs text-brand-ink">Cannot delete yourself</span>
+                        ) : (
+                          <Button variant="ghost" className="text-brand-orange !px-2" onClick={() => removeUser(u)}>
+                            <Trash2 size={16} />
+                          </Button>
+                        )}
+                      </div>
+                    </div>
+                  )}
                 </div>
               );
             })}
