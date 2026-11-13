@@ -6,7 +6,7 @@ Notes API interview project.
 
 | Item | URL |
 | ---- | --- |
-| **Frontend (Next.js)** | https://noteapp-frontend-vd3y.onrender.com |
+| **Frontend (Next.js)** | https://noteapp-web.vercel.app |
 | **Backend API** | https://noteapp-a4z2.onrender.com |
 | **API docs (Swagger)** | https://noteapp-a4z2.onrender.com/docs |
 | **Health check** | https://noteapp-a4z2.onrender.com/health |
@@ -14,10 +14,10 @@ Notes API interview project.
 
 **Repository layout (one GitHub repo, two deploy roots):**
 
-| Part | Folder | Render service |
-| ---- | ------ | -------------- |
-| Backend | [`api/`](https://github.com/Showrav88/noteapp/tree/main/api) | `noteapp-a4z2` |
-| Frontend | [`web/`](https://github.com/Showrav88/noteapp/tree/main/web) | `noteapp-frontend-vd3y` |
+| Part | Folder | Hosting |
+| ---- | ------ | ------- |
+| Backend | [`api/`](https://github.com/Showrav88/noteapp/tree/main/api) | Render — `noteapp-a4z2` |
+| Frontend | [`web/`](https://github.com/Showrav88/noteapp/tree/main/web) | Vercel — `noteapp-web` |
 
 - Backend: Express 5 + MongoDB (Mongoose) in `api/`
 - Frontend: Next.js App Router in `web/`
@@ -71,18 +71,16 @@ Schemas live in `api/src/models/`. Declared indexes only via `schema.index(...)`
 | 8 | `npm run explain` in `api/` | No COLLSCAN on listed queries |
 | 9 | OpenAPI for every endpoint | Try from `/docs` |
 | 10 | Next.js frontend (`web/`) | Done — see below |
-| 11 | Deploy API + web on Render | Public URLs below |
+| 11 | Deploy API (Render) + web (Vercel) | Public URLs below |
 | 12 | README index explanations | Section below |
 
 ## Deployment (step 11)
 
-Both services run on **Render** (free tier): API + separate Web service (`Root Directory` = `web`).
-
-| Service | Live URL |
-| ------- | -------- |
-| Frontend | https://noteapp-frontend-vd3y.onrender.com |
-| API | https://noteapp-a4z2.onrender.com |
-| Swagger | https://noteapp-a4z2.onrender.com/docs |
+| Service | Platform | Live URL |
+| ------- | -------- | -------- |
+| Frontend | **Vercel** | https://noteapp-web.vercel.app |
+| API | **Render** | https://noteapp-a4z2.onrender.com |
+| Swagger | Render | https://noteapp-a4z2.onrender.com/docs |
 
 **API environment variables (Render):**
 
@@ -90,15 +88,15 @@ Both services run on **Render** (free tier): API + separate Web service (`Root D
 | -------- | -------------- |
 | `MONGODB_URI` | Atlas connection string |
 | `JWT_SECRET` | Long random secret |
-| `CORS_ORIGIN` | `https://noteapp-frontend-vd3y.onrender.com` |
+| `CORS_ORIGIN` | `https://noteapp-web.vercel.app` |
 
-**Web environment variables (Render):**
+**Frontend environment variables (Vercel):**
 
 | Variable | Example / note |
 | -------- | -------------- |
 | `NEXT_PUBLIC_API_URL` | `https://noteapp-a4z2.onrender.com` |
 
-Build: `npm ci && npm run build` · Start: `npm start` · Root directory: `web`
+Vercel: **Root Directory** = `web` · Install `npm ci` · Build `npm run build` · Framework preset Next.js.
 
 ## Web (step 10)
 
