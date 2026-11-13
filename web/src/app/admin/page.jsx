@@ -200,6 +200,9 @@ function AdminPageContent() {
                   {isEditing ? (
                     <div className="space-y-3">
                       <h3 className="text-sm font-bold text-brand-navy">Update user</h3>
+                      <p className="text-sm text-brand-ink">
+                        Editing <span className="font-semibold text-brand-navy">{u.name}</span> ({u.email})
+                      </p>
                       <Input
                         label="Name"
                         value={editForm.name}
@@ -258,7 +261,6 @@ function AdminPageContent() {
                         <p className="text-sm text-brand-ink">{u.email}</p>
                         <p className="text-xs text-brand-ink">
                           Role: {u.role}
-                          {u.interests?.length ? ` · Interests: ${u.interests.join(', ')}` : ''}
                           {isSelf ? ' · you' : ''}
                         </p>
                       </div>
