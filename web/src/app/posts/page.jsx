@@ -54,7 +54,10 @@ export default function PostsFeedPage() {
         title="Post feed"
         description="Recent posts from everyone. Open an author’s name to view their posts."
       />
-      <form onSubmit={createPost} className="mb-8 rounded-lg border border-brand-border bg-white p-4 shadow-card">
+      <form
+        onSubmit={createPost}
+        className="mb-8 rounded-xl border-2 border-brand-border bg-white p-4 shadow-sm sm:p-5"
+      >
         <h2 className="text-sm font-semibold text-brand-navy">Write a post</h2>
         <div className="mt-3 grid gap-3 sm:grid-cols-2">
           <Input label="Title" value={title} onChange={(e) => setTitle(e.target.value)} required />
@@ -65,24 +68,38 @@ export default function PostsFeedPage() {
         </Button>
       </form>
       {error ? <p className="mb-4 text-sm text-brand-orange">{error}</p> : null}
-      <section className="space-y-3">
+      <section className="space-y-4">
         {loading ? (
           <p className="text-sm text-brand-ink/60">Loading…</p>
         ) : (
           data.items.map((post) => (
-            <article key={post._id} className="rounded-lg border border-brand-border bg-white p-4 shadow-card">
-              <div className="flex flex-wrap items-start justify-between gap-2">
-                <h2 className="font-semibold text-brand-navy">{post.title}</h2>
-                <Link
-                  href={`/posts/user/${post.author._id}`}
-                  className="inline-flex items-center gap-1 text-xs font-semibold text-brand-cyan hover:underline"
+            <article
+              key={post._id}
+              className="overflow-hidden rounded-xl border-2 border-brand-border bg-white shadow-sm ring-1 ring-brand-border/30"
+            >
+              <header className="flex items-start gap-3 border-b border-brand-border bg-brand-muted/50 px-4 py-3 sm:px-5">
+                <span
+                  className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-brand-navy text-brand-cyan"
+                  aria-hidden
                 >
-                  <UserRound size={14} />
-                  {post.author.name}
-                </Link>
+                  <UserRound size={20} strokeWidth={2} />
+                </span>
+                <div className="min-w-0 flex-1">
+                  <Link
+                    href={`/posts/user/${post.author._id}`}
+                    className="block truncate text-sm font-bold text-brand-navy hover:text-brand-cyan"
+                  >
+                    {post.author.name}
+                  </Link>
+                  <p className="truncate text-xs text-brand-ink/55">{post.author.email}</p>
+                </div>
+              </header>
+              <div className="px-4 py-4 sm:px-5">
+                <h2 className="text-lg font-bold text-brand-navy">{post.title}</h2>
+                {post.body ? (
+                  <p className="mt-2 text-sm leading-relaxed text-brand-ink/85 whitespace-pre-wrap">{post.body}</p>
+                ) : null}
               </div>
-              <p className="mt-1 text-xs text-brand-ink/50">{post.author.email}</p>
-              {post.body ? <p className="mt-2 text-sm text-brand-ink/80 whitespace-pre-wrap">{post.body}</p> : null}
             </article>
           ))
         )}
