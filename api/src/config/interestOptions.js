@@ -10,6 +10,11 @@ export const INTEREST_OPTIONS = [
   { value: 'photography', label: 'Photography' },
   { value: 'gaming', label: 'Gaming' },
   { value: 'fitness', label: 'Fitness' },
+  { value: 'news', label: 'News' },
+  { value: 'movies', label: 'Movies' },
+  { value: 'art', label: 'Art' },
+  { value: 'science', label: 'Science' },
+  { value: 'gardening', label: 'Gardening' },
 ];
 
 export const ALLOWED_INTERESTS = new Set(INTEREST_OPTIONS.map((o) => o.value));

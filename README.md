@@ -159,7 +159,7 @@ Requires at least one user in the database (register or seed first).
 
 ## Interests (catalog + Scenario 1)
 
-- **Catalog:** `api/src/config/interestOptions.js` — 10 fixed tags (`chess`, `reading`, `music`, …). No free-text interests.
+- **Catalog:** `api/src/config/interestOptions.js` — 15 fixed tags (`chess`, `reading`, `news`, …). No free-text interests.
 - **API:** `GET /interests/options` (public) returns `{ items: [{ value, label }] }`.
 - **Validation:** `parseInterests()` in `api/src/utils/interests.js` on register and admin user create/update (at least one interest required).
 - **UI:** Product-facing copy on `web/`; aggregation details for graders are in this README and OpenAPI.
