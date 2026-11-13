@@ -116,29 +116,34 @@ function AdminPageContent() {
 
   const filterOwner = notes.items[0]?.owner;
   const tabs = [
-    { id: 'users', label: 'Users' },
-    { id: 'notes', label: 'All notes' },
+    { id: 'users', label: 'User management', hint: 'Create accounts, list users, delete users (not yourself).' },
+    { id: 'notes', label: 'Note management', hint: 'Read all private notes. Use Their notes to show one owner’s notes.' },
   ];
+
+  const activeTab = tabs.find((t) => t.id === tab);
 
   return (
     <div>
       <PageHeader
-        title="Admin"
-        description="Read every user’s private notes. Use Their notes to filter by one owner."
+        title="Admin — users & notes"
+        description="Two jobs: manage accounts, and read every user’s private notes (admin-only API)."
       />
-      <div className="mb-6 flex gap-2">
-        {tabs.map((t) => (
-          <button
-            key={t.id}
-            type="button"
-            onClick={() => switchTab(t.id)}
-            className={`rounded-md px-4 py-2 text-sm font-semibold ${
-              tab === t.id ? 'bg-brand-navy text-white' : 'bg-white border border-brand-border text-brand-ink'
-            }`}
-          >
-            {t.label}
-          </button>
-        ))}
+      <div className="mb-6">
+        <div className="flex flex-wrap gap-2">
+          {tabs.map((t) => (
+            <button
+              key={t.id}
+              type="button"
+              onClick={() => switchTab(t.id)}
+              className={`rounded-md px-4 py-2 text-sm font-semibold ${
+                tab === t.id ? 'bg-brand-navy text-white' : 'bg-white border border-brand-border text-brand-ink'
+              }`}
+            >
+              {t.label}
+            </button>
+          ))}
+        </div>
+        {activeTab ? <p className="mt-3 text-sm text-brand-ink">{activeTab.hint}</p> : null}
       </div>
       {error ? <p className="mb-4 text-sm text-brand-orange">{error}</p> : null}
 

@@ -63,7 +63,7 @@ export function AppShell({ children }) {
   ];
 
   if (user?.role === 'admin') {
-    nav.push({ href: '/admin', label: 'Admin', icon: Shield });
+    nav.push({ href: '/admin', label: 'Users & notes', icon: Shield });
   }
 
   return (
