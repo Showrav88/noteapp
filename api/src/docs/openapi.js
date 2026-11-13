@@ -1,3 +1,8 @@
+import { INTEREST_OPTIONS } from '../config/interestOptions.js';
+
+const allowedInterestValues = INTEREST_OPTIONS.map((o) => o.value);
+const interestTag = { type: 'string', enum: allowedInterestValues };
+
 const pageParams = [
   { name: 'page', in: 'query', schema: { type: 'integer', default: 1 } },
   { name: 'limit', in: 'query', schema: { type: 'integer', default: 10, maximum: 50 } },
@@ -24,8 +29,8 @@ const registerBody = {
     password: { type: 'string', format: 'password' },
     interests: {
       type: 'array',
-      items: { type: 'string' },
-      description: 'Optional. Used by Scenario 1 (users grouped by interest).',
+      items: interestTag,
+      description: 'Optional. Must be values from GET /interests/options.',
     },
   },
 };
@@ -55,7 +60,7 @@ const adminUserBody = {
     name: { type: 'string' },
     email: { type: 'string' },
     password: { type: 'string' },
-    interests: { type: 'array', items: { type: 'string' } },
+    interests: { type: 'array', items: interestTag },
   },
 };
 
@@ -66,7 +71,7 @@ const patchUserBody = {
     email: { type: 'string' },
     password: { type: 'string' },
     role: { type: 'string', enum: ['user', 'admin'] },
-    interests: { type: 'array', items: { type: 'string' } },
+    interests: { type: 'array', items: interestTag },
   },
 };
 
@@ -115,6 +120,17 @@ export const openapi = {
           { email: 'alice@example.com', password: 'securepass123' },
         ),
         responses: { 200: { description: 'Token' }, 401: { description: 'Unauthorized' } },
+      },
+    },
+    '/interests/options': {
+      get: {
+        summary: 'Allowed interest tags (for register UI)',
+        tags: ['Interests'],
+        responses: {
+          200: {
+            description: '{ items: [{ value, label }] }',
+          },
+        },
       },
     },
     '/users/me': {

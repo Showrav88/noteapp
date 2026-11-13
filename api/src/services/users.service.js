@@ -6,7 +6,7 @@ import { Post } from '../models/Post.js';
 import { HttpError } from '../utils/HttpError.js';
 import { parsePagination, slicePage } from '../utils/paginate.js';
 import { toObjectId } from '../utils/objectId.js';
-import { normalizeInterests } from '../utils/interests.js';
+import { parseInterests } from '../utils/interests.js';
 
 function publicUser(user) {
   return {
@@ -51,7 +51,7 @@ export async function createUser(body, actor) {
       email: email.trim().toLowerCase(),
       passwordHash,
       role: 'user',
-      interests: normalizeInterests(interests),
+      interests: parseInterests(interests),
     });
     return publicUser(user);
   } catch (err) {
@@ -86,7 +86,7 @@ export async function updateUser(userId, body, actor) {
 
   if (body.name !== undefined) user.name = String(body.name).trim();
   if (body.email !== undefined) user.email = String(body.email).trim().toLowerCase();
-  if (Array.isArray(body.interests)) user.interests = body.interests;
+  if (Array.isArray(body.interests)) user.interests = parseInterests(body.interests);
   if (body.password) {
     user.passwordHash = await bcrypt.hash(body.password, 10);
   }

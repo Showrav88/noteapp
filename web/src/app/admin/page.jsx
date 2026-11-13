@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { Trash2 } from 'lucide-react';
 import { Button } from '../../components/Button';
 import { Input } from '../../components/Input';
+import { InterestPicker } from '../../components/InterestPicker';
 import { PageHeader } from '../../components/PageHeader';
 import { Pagination } from '../../components/Pagination';
 import { api, getCachedUser } from '../../lib/api';
@@ -16,7 +17,7 @@ export default function AdminPage() {
   const [notes, setNotes] = useState({ items: [], page: 1, hasNextPage: false });
   const [userPage, setUserPage] = useState(1);
   const [notePage, setNotePage] = useState(1);
-  const [form, setForm] = useState({ name: '', email: '', password: '', interests: '' });
+  const [form, setForm] = useState({ name: '', email: '', password: '', interests: [] });
   const [error, setError] = useState('');
 
   useEffect(() => {
@@ -46,12 +47,9 @@ export default function AdminPage() {
     try {
       await api('/users', {
         method: 'POST',
-        body: JSON.stringify({
-          ...form,
-          interests: form.interests.split(',').map((s) => s.trim()).filter(Boolean),
-        }),
+        body: JSON.stringify(form),
       });
-      setForm({ name: '', email: '', password: '', interests: '' });
+      setForm({ name: '', email: '', password: '', interests: [] });
       setUserPage(1);
       const res = await api('/users?page=1&limit=10');
       setUsers(res);
@@ -117,7 +115,7 @@ export default function AdminPage() {
             <Input label="Name" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} required />
             <Input label="Email" type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} required />
             <Input label="Password" type="password" value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })} required />
-            <Input label="Interests" value={form.interests} onChange={(e) => setForm({ ...form, interests: e.target.value })} placeholder="chess, reading" />
+            <InterestPicker value={form.interests} onChange={(interests) => setForm({ ...form, interests })} label="Interests" />
             <Button type="submit" className="w-full">
               Create user
             </Button>

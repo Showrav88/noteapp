@@ -2,7 +2,7 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { User } from '../models/User.js';
 import { HttpError } from '../utils/HttpError.js';
-import { normalizeInterests } from '../utils/interests.js';
+import { parseInterests } from '../utils/interests.js';
 
 const INVALID_LOGIN = 'Invalid email or password';
 
@@ -35,7 +35,7 @@ export async function register({ name, email, password, interests }) {
       email: email.trim().toLowerCase(),
       passwordHash,
       role: 'user',
-      interests: normalizeInterests(interests),
+      interests: parseInterests(interests),
     });
     return { token: signToken(user._id), user: publicUser(user) };
   } catch (err) {

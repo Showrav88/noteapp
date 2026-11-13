@@ -9,6 +9,7 @@ import authRoutes from './routes/auth.routes.js';
 import usersRoutes from './routes/users.routes.js';
 import notesRoutes from './routes/notes.routes.js';
 import postsRoutes from './routes/posts.routes.js';
+import interestsRoutes from './routes/interests.routes.js';
 
 const app = express();
 
@@ -36,6 +37,7 @@ app.use('/auth', authRoutes);
 app.use('/users', usersRoutes);
 app.use('/notes', notesRoutes);
 app.use('/posts', postsRoutes);
+app.use('/interests', interestsRoutes);
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(openapi));
 
 app.use(errorHandler);
