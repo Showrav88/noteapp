@@ -12,9 +12,6 @@ import { Pagination } from '../../components/Pagination';
 import { api, getCachedUser } from '../../lib/api';
 import { useRouter, useSearchParams } from 'next/navigation';
 
-const actionLink =
-  'inline-flex items-center justify-center rounded-md border border-brand-border bg-white px-3 py-1.5 text-xs font-semibold text-brand-navy hover:border-brand-cyan hover:text-brand-cyan';
-
 function AdminPageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -116,7 +113,7 @@ function AdminPageContent() {
 
   const filterOwner = notes.items[0]?.owner;
   const tabs = [
-    { id: 'users', label: 'User management', hint: 'Create accounts, list users, delete users (not yourself).' },
+    { id: 'users', label: 'User management', hint: 'Create accounts, list users, and delete users.' },
     { id: 'notes', label: 'Note management', hint: 'Read all private notes. Use Their notes to show one owner’s notes.' },
   ];
 
@@ -163,9 +160,6 @@ function AdminPageContent() {
                     </p>
                   </div>
                   <div className="flex shrink-0 items-center gap-2">
-                    <Link href={`/admin?tab=notes&owner=${u._id}`} className={actionLink}>
-                      Their notes
-                    </Link>
                     {isSelf ? (
                       <span className="text-xs text-brand-ink">Cannot delete yourself</span>
                     ) : (
