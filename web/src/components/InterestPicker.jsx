@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { api } from '../lib/api';
 
-export function InterestPicker({ value, onChange, label = 'Interests (optional)' }) {
+export function InterestPicker({ value, onChange, label = 'Interests', required = false }) {
   const [options, setOptions] = useState([]);
   const [loadError, setLoadError] = useState('');
 
@@ -25,7 +25,12 @@ export function InterestPicker({ value, onChange, label = 'Interests (optional)'
 
   return (
     <div>
-      <p className="mb-2 block text-sm font-medium text-brand-navy">{label}</p>
+      <p className="mb-2 block text-sm font-medium text-brand-navy">
+        {label}
+        {required && value.length === 0 ? (
+          <span className="ml-1 font-normal text-brand-ink/50">— pick at least one</span>
+        ) : null}
+      </p>
       {loadError ? <p className="mb-2 text-xs text-brand-orange">{loadError}</p> : null}
       <div className="flex flex-wrap gap-2">
         {options.map((opt) => {

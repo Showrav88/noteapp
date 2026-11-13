@@ -52,7 +52,7 @@ export default function PostsFeedPage() {
     <div>
       <PageHeader
         title="Post feed"
-        description="Everyone’s posts (login required). Open a author’s profile for Scenario 2 aggregation."
+        description="Recent posts from everyone. Open an author’s name to view their posts."
       />
       <form onSubmit={createPost} className="mb-8 rounded-lg border border-brand-border bg-white p-4 shadow-card">
         <h2 className="text-sm font-semibold text-brand-navy">Write a post</h2>

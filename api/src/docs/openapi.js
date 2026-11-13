@@ -22,15 +22,16 @@ const jsonBody = (schema, example) => ({
 
 const registerBody = {
   type: 'object',
-  required: ['name', 'email', 'password'],
+  required: ['name', 'email', 'password', 'interests'],
   properties: {
     name: { type: 'string' },
     email: { type: 'string', format: 'email' },
     password: { type: 'string', format: 'password' },
     interests: {
       type: 'array',
+      minItems: 1,
       items: interestTag,
-      description: 'Optional. Must be values from GET /interests/options.',
+      description: 'Required. At least one value from GET /interests/options.',
     },
   },
 };
@@ -55,12 +56,12 @@ const postBody = {
 
 const adminUserBody = {
   type: 'object',
-  required: ['name', 'email', 'password'],
+  required: ['name', 'email', 'password', 'interests'],
   properties: {
     name: { type: 'string' },
     email: { type: 'string' },
     password: { type: 'string' },
-    interests: { type: 'array', items: interestTag },
+    interests: { type: 'array', minItems: 1, items: interestTag },
   },
 };
 
@@ -71,7 +72,7 @@ const patchUserBody = {
     email: { type: 'string' },
     password: { type: 'string' },
     role: { type: 'string', enum: ['user', 'admin'] },
-    interests: { type: 'array', items: interestTag },
+    interests: { type: 'array', minItems: 1, items: interestTag },
   },
 };
 

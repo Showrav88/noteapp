@@ -19,6 +19,10 @@ export default function RegisterPage() {
 
   async function onSubmit(e) {
     e.preventDefault();
+    if (interests.length === 0) {
+      setError('Choose at least one interest.');
+      return;
+    }
     setError('');
     setLoading(true);
     try {
@@ -46,14 +50,14 @@ export default function RegisterPage() {
       <div className="w-full max-w-md rounded-lg border border-brand-border bg-white p-8 shadow-card">
         <p className="text-xs font-semibold uppercase tracking-wider text-brand-cyan">Noteapp</p>
         <h1 className="mt-2 text-2xl font-bold text-brand-navy">Create account</h1>
-        <p className="mt-1 text-sm text-brand-ink/70">Pick interests from the list (used by Scenario 1).</p>
+        <p className="mt-1 text-sm text-brand-ink/70">Choose at least one interest so others can find you by topic.</p>
         <form onSubmit={onSubmit} className="mt-6 space-y-4">
           <Input label="Name" value={name} onChange={(e) => setName(e.target.value)} required />
           <Input label="Email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
           <Input label="Password" type="password" autoComplete="new-password" value={password} onChange={(e) => setPassword(e.target.value)} required />
-          <InterestPicker value={interests} onChange={setInterests} />
+          <InterestPicker value={interests} onChange={setInterests} label="Interests (required)" required />
           {error ? <p className="text-sm text-brand-orange">{error}</p> : null}
-          <Button type="submit" className="w-full" disabled={loading}>
+          <Button type="submit" className="w-full" disabled={loading || interests.length === 0}>
             {loading ? 'Creating…' : 'Register'}
           </Button>
         </form>

@@ -19,12 +19,18 @@ export default function AdminPage() {
   const [notePage, setNotePage] = useState(1);
   const [form, setForm] = useState({ name: '', email: '', password: '', interests: [] });
   const [error, setError] = useState('');
+  const [me, setMe] = useState(null);
 
   useEffect(() => {
-    const me = getCachedUser();
-    if (me?.role !== 'admin') {
+    const cached = getCachedUser();
+    if (cached?.role !== 'admin') {
       router.replace('/notes');
+      return;
     }
+    setMe(cached);
+    api('/users/me')
+      .then(setMe)
+      .catch(() => router.replace('/notes'));
   }, [router]);
 
   useEffect(() => {
@@ -43,6 +49,10 @@ export default function AdminPage() {
 
   async function addUser(e) {
     e.preventDefault();
+    if (form.interests.length === 0) {
+      setError('Choose at least one interest for the new user.');
+      return;
+    }
     setError('');
     try {
       await api('/users', {
@@ -58,10 +68,17 @@ export default function AdminPage() {
     }
   }
 
-  async function removeUser(id) {
-    if (!confirm('Delete user and their notes/posts?')) return;
+  async function removeUser(user) {
+    if (me && String(user._id) === String(me._id)) return;
+    if (
+      !confirm(
+        `Permanently delete ${user.name} (${user.email})? Their notes and posts will be removed.`,
+      )
+    ) {
+      return;
+    }
     try {
-      await api(`/users/${id}`, { method: 'DELETE' });
+      await api(`/users/${user._id}`, { method: 'DELETE' });
       const res = await api(`/users?page=${userPage}&limit=10`);
       setUsers(res);
     } catch (err) {
@@ -96,27 +113,60 @@ export default function AdminPage() {
       {tab === 'users' ? (
         <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_300px]">
           <section className="space-y-3">
-            {users.items.map((u) => (
-              <div key={u._id} className="flex items-center justify-between rounded-lg border border-brand-border bg-white p-4 shadow-card">
-                <div>
-                  <p className="font-semibold text-brand-navy">{u.name}</p>
-                  <p className="text-sm text-brand-ink/60">{u.email}</p>
-                  <p className="text-xs text-brand-ink/50">Role: {u.role}</p>
+            {users.items.map((u) => {
+              const isSelf = me && String(u._id) === String(me._id);
+              return (
+                <div key={u._id} className="flex items-center justify-between rounded-lg border border-brand-border bg-white p-4 shadow-card">
+                  <div>
+                    <p className="font-semibold text-brand-navy">{u.name}</p>
+                    <p className="text-sm text-brand-ink/60">{u.email}</p>
+                    <p className="text-xs text-brand-ink/50">
+                      Role: {u.role}
+                      {isSelf ? ' · you' : ''}
+                    </p>
+                  </div>
+                  {isSelf ? (
+                    <span className="text-xs text-brand-ink/50">Cannot delete yourself</span>
+                  ) : (
+                    <Button variant="ghost" className="text-brand-orange" onClick={() => removeUser(u)}>
+                      <Trash2 size={16} />
+                    </Button>
+                  )}
                 </div>
-                <Button variant="ghost" className="text-brand-orange" onClick={() => removeUser(u._id)}>
-                  <Trash2 size={16} />
-                </Button>
-              </div>
-            ))}
+              );
+            })}
             <Pagination page={userPage} hasNextPage={users.hasNextPage} onPageChange={setUserPage} />
           </section>
-          <form onSubmit={addUser} className="h-fit rounded-lg border border-brand-border bg-white p-4 shadow-card space-y-3">
+          <form
+            onSubmit={addUser}
+            autoComplete="off"
+            className="h-fit rounded-lg border border-brand-border bg-white p-4 shadow-card space-y-3"
+          >
             <h2 className="font-semibold text-brand-navy">Add user</h2>
-            <Input label="Name" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} required />
-            <Input label="Email" type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} required />
-            <Input label="Password" type="password" value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })} required />
-            <InterestPicker value={form.interests} onChange={(interests) => setForm({ ...form, interests })} label="Interests" />
-            <Button type="submit" className="w-full">
+            <Input label="Name" autoComplete="off" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} required />
+            <Input
+              label="Email"
+              type="email"
+              autoComplete="off"
+              value={form.email}
+              onChange={(e) => setForm({ ...form, email: e.target.value })}
+              required
+            />
+            <Input
+              label="Password"
+              type="password"
+              autoComplete="new-password"
+              value={form.password}
+              onChange={(e) => setForm({ ...form, password: e.target.value })}
+              required
+            />
+            <InterestPicker
+              value={form.interests}
+              onChange={(interests) => setForm({ ...form, interests })}
+              label="Interests (required)"
+              required
+            />
+            <Button type="submit" className="w-full" disabled={form.interests.length === 0}>
               Create user
             </Button>
           </form>

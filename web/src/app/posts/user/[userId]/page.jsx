@@ -29,14 +29,13 @@ export default function UserPostsPage() {
     <div>
       <PageHeader
         title={data ? `${data.name}'s posts` : 'User posts'}
-        description="Scenario 2: single aggregation with $lookup. User id is in the URL."
+        description="All posts published by this author."
       />
       {error ? <p className="text-sm text-brand-orange">{error}</p> : null}
       {loading ? (
         <p className="text-sm text-brand-ink/60">Loading…</p>
       ) : (
         <section className="space-y-3">
-          <p className="text-xs text-brand-ink/50">User id: {userId}</p>
           {data?.posts?.length ? (
             data.posts.map((post) => (
               <article key={post._id} className="rounded-lg border border-brand-border bg-white p-4 shadow-card">

@@ -27,7 +27,7 @@ export default function InterestsPage() {
     <div>
       <PageHeader
         title="Users by interest"
-        description="Scenario 1: one aggregation groups profiles by each interest string."
+        description="See who shares each interest and how many people chose it."
       />
       {error ? <p className="text-sm text-brand-orange">{error}</p> : null}
       {loading ? (

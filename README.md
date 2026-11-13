@@ -86,7 +86,8 @@ Open `http://localhost:3001`. Set API `CORS_ORIGIN=http://localhost:3001`.
 
 - **Catalog:** `api/src/config/interestOptions.js` — 10 fixed tags (`chess`, `reading`, `music`, …). No free-text interests.
 - **API:** `GET /interests/options` (public) returns `{ items: [{ value, label }] }`.
-- **Validation:** `parseInterests()` in `api/src/utils/interests.js` runs on `POST /auth/register`, admin `POST /users`, and admin `PATCH /users/:id`.
+- **Validation:** `parseInterests()` in `api/src/utils/interests.js` runs on `POST /auth/register`, admin `POST /users`, and admin `PATCH /users/:id` (at least one interest required on register/create; empty arrays rejected).
+- **UI:** Product-facing copy only on `web/`; Scenario 1/2 and aggregation details stay in this README and OpenAPI for reviewers.
 - **Scenario 1 (unchanged):** `GET /users/by-interest` — one `User.aggregate()` on the **users** collection (`$match` → `$unwind` → `$group` → `$sort` → paginate). The web `/interests` page uses this endpoint.
 - **Index `users.interests_1`:** multikey index; supports the first `$match` on users who have string interests. Run `cd api && node scripts/explain.js` and check **Scenario 1 match on interests** uses the index (not `COLLSCAN`).
 

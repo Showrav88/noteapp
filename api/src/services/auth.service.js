@@ -35,7 +35,7 @@ export async function register({ name, email, password, interests }) {
       email: email.trim().toLowerCase(),
       passwordHash,
       role: 'user',
-      interests: parseInterests(interests),
+      interests: parseInterests(interests, { minCount: 1 }),
     });
     return { token: signToken(user._id), user: publicUser(user) };
   } catch (err) {

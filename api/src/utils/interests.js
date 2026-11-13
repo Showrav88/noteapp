@@ -8,9 +8,9 @@ export function listInterestOptions() {
 /**
  * Normalize and validate interests against the fixed catalog (no free-text tags).
  */
-export function parseInterests(interests) {
+export function parseInterests(interests, { minCount = 0 } = {}) {
   if (interests === undefined || interests === null) {
-    return [];
+    interests = [];
   }
   if (!Array.isArray(interests)) {
     throw new HttpError(400, 'interests must be an array of strings');
@@ -31,6 +31,10 @@ export function parseInterests(interests) {
       seen.add(value);
       result.push(value);
     }
+  }
+
+  if (result.length < minCount) {
+    throw new HttpError(400, 'Select at least one interest (see GET /interests/options).');
   }
 
   return result;

@@ -51,7 +51,7 @@ export async function createUser(body, actor) {
       email: email.trim().toLowerCase(),
       passwordHash,
       role: 'user',
-      interests: parseInterests(interests),
+      interests: parseInterests(interests, { minCount: 1 }),
     });
     return publicUser(user);
   } catch (err) {
@@ -86,7 +86,7 @@ export async function updateUser(userId, body, actor) {
 
   if (body.name !== undefined) user.name = String(body.name).trim();
   if (body.email !== undefined) user.email = String(body.email).trim().toLowerCase();
-  if (Array.isArray(body.interests)) user.interests = parseInterests(body.interests);
+  if (Array.isArray(body.interests)) user.interests = parseInterests(body.interests, { minCount: 1 });
   if (body.password) {
     user.passwordHash = await bcrypt.hash(body.password, 10);
   }
